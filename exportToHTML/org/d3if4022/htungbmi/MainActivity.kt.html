@@ -1,0 +1,87 @@
+<html>
+<head>
+<title>MainActivity.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+MainActivity.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">org.d3if4022.htungbmi</span>
+
+<span class="s1">import androidx.appcompat.app.AppCompatActivity</span>
+<span class="s1">import android.os.Bundle</span>
+<span class="s1">import android.text.TextUtils</span>
+<span class="s1">import android.util.Log</span>
+<span class="s1">import android.widget.Toast</span>
+<span class="s1">import org.d3if4022.htungbmi.databinding.ActivityMainBinding</span>
+
+<span class="s0">class </span><span class="s1">MainActivity : AppCompatActivity() {</span>
+    <span class="s1">private lateinit </span><span class="s0">var </span><span class="s1">binding: ActivityMainBinding</span>
+
+    <span class="s1">override </span><span class="s0">fun </span><span class="s1">onCreate(savedInstanceState: Bundle?) {</span>
+        <span class="s0">super</span><span class="s1">.onCreate(savedInstanceState)</span>
+
+        <span class="s1">binding = ActivityMainBinding.inflate(layoutInflater)</span>
+        <span class="s1">setContentView(binding.root)</span>
+
+        <span class="s1">binding.button.setOnClickListener { hitungBmi() }</span>
+
+        <span class="s1">binding.button2.setOnClickListener{ resetbmi() }</span>
+
+    <span class="s1">}</span>
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">hitungBmi() {</span>
+        <span class="s0">val </span><span class="s1">berat = binding.beratEditText.text.toString()</span>
+        <span class="s0">if </span><span class="s1">(TextUtils.isEmpty(berat)) {</span>
+            <span class="s1">Toast.makeText(</span><span class="s0">this, </span><span class="s1">R.string.berat_invalid</span><span class="s0">, </span><span class="s1">Toast.LENGTH_LONG).show()</span>
+            <span class="s0">return</span>
+        <span class="s1">}</span>
+        <span class="s0">val </span><span class="s1">tinggi = binding.tinggiEditText.text.toString()</span>
+        <span class="s0">if </span><span class="s1">(TextUtils.isEmpty(tinggi)) {</span>
+            <span class="s1">Toast.makeText(</span><span class="s0">this, </span><span class="s1">R.string.tinggi_invalid</span><span class="s0">, </span><span class="s1">Toast.LENGTH_LONG).show()</span>
+            <span class="s0">return</span>
+        <span class="s1">}</span>
+        <span class="s0">val </span><span class="s1">tinggiCm = tinggi.toFloat() / </span><span class="s2">100</span>
+
+        <span class="s0">val </span><span class="s1">selectedId = binding.radioGroup.checkedRadioButtonId</span>
+        <span class="s0">if </span><span class="s1">(selectedId == -</span><span class="s2">1</span><span class="s1">) {</span>
+            <span class="s1">Toast.makeText(</span><span class="s0">this, </span><span class="s1">R.string.gender_invalid</span><span class="s0">, </span><span class="s1">Toast.LENGTH_LONG).show()</span>
+            <span class="s0">return</span>
+        <span class="s1">}</span>
+        <span class="s0">val </span><span class="s1">isMale = selectedId == R.id.priaRadioButton</span>
+        <span class="s0">val </span><span class="s1">bmi = berat.toFloat() / (tinggiCm * tinggiCm)</span>
+        <span class="s0">val </span><span class="s1">kategori = getKategori(bmi</span><span class="s0">, </span><span class="s1">isMale)</span>
+
+        <span class="s1">binding.bmiTextView.text = getString(R.string.bmi_x</span><span class="s0">, </span><span class="s1">bmi)</span>
+        <span class="s1">binding.kategoriTextView.text = getString(R.string.kategori_x</span><span class="s0">, </span><span class="s1">kategori)</span>
+
+    <span class="s1">}</span>
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">resetbmi(){</span>
+        
+    <span class="s1">}</span>
+    <span class="s1">private </span><span class="s0">fun </span><span class="s1">getKategori(bmi: Float</span><span class="s0">, </span><span class="s1">isMale: Boolean): String {</span>
+        <span class="s0">val </span><span class="s1">stringRes = </span><span class="s0">if </span><span class="s1">(isMale) {</span>
+            <span class="s0">when </span><span class="s1">{</span>
+                <span class="s1">bmi &lt; </span><span class="s2">20.5 </span><span class="s1">-&gt; R.string.kurus</span>
+                <span class="s1">bmi &gt;= </span><span class="s2">27.0 </span><span class="s1">-&gt; R.string.gemuk</span>
+                <span class="s0">else </span><span class="s1">-&gt; R.string.ideal</span>
+            <span class="s1">}</span>
+        <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+            <span class="s0">when </span><span class="s1">{</span>
+                <span class="s1">bmi &lt; </span><span class="s2">18.5 </span><span class="s1">-&gt; R.string.kurus</span>
+                <span class="s1">bmi &gt;= </span><span class="s2">25.0 </span><span class="s1">-&gt; R.string.gemuk</span>
+                <span class="s0">else </span><span class="s1">-&gt; R.string.ideal</span>
+            <span class="s1">}</span>
+        <span class="s1">}</span>
+        <span class="s0">return </span><span class="s1">getString(stringRes)</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>
